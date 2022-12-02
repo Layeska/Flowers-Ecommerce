@@ -6,50 +6,24 @@ class OrderServices {
         try {
             return await Order.findAll({ 
                 where: {userId: userId},
-                include: {
-                    model: ProductsInOrder
-                }
+                include: { model: ProductsInOrder}
             });
         } catch(error) { throw error; }
     };
 
-    /*
-    {
-        orderProduct: {
-            [1, 1, 1, 10.50],
-            [1,2,1,50.36]
-        }
-    }
-    */
-
     static async create(info) {
         try {
-            const created = await Order.create({
-                userId: info,
-                totalPrice: 0,
-                status: "purchased"
-            });
+            const created = await Order.create({ userId: info, totalPrice: 0, status: "purchased" });
 
-           // console.log("\n********* Created - es la Orden: ******************\n")
-           // console.log(created);
+            console.log("\n**** creating the order ****");
 
             const orderId = created.id;
 
-            const auxCart = await Cart.findOne({
-                where: { userId: info},
-                include: {
-                    model: ProductInCart
-                }
-            });
+            const auxCart = await Cart.findOne({ where: { userId: info}, include: { model: ProductInCart } });
 
-            //console.log("\n**************AuxCart: es El CART*******************\n")
-            //console.log(auxCart);
+            console.log("**** Adding the cart ****")
 
             const auxList = auxCart.productsInCarts;
-
-           // console.log("\n******************* AUXLIST - productInCart *********\n");
-           // console.log(auxList);
-            //auxList.forEach(element => console.log(element));
 
             const listPurchased = auxList.map((product) => {
                 return {
@@ -61,33 +35,23 @@ class OrderServices {
                 };
             });
 
-            //console.log("\n********************** List Purchase es copia de product in order*******************\n")
-            //console.log(listPurchased);
+            console.log("**** Managing the purchase of products ****");
 
-
-            //console.log("\n******** X: Los productos en order *********\n")
             await forEach(listPurchased, async data => await ProductsInOrder.create(data));
-            //console.log(x);
 
-            //Se buscar la orden 
             const data = await Order.findOne({
                 where: { id: orderId},
-                include: {
-                    model: ProductsInOrder
-                }
-            });
+                include: { model: ProductsInOrder } });
 
-           // console.log("\n***********************DATA: Busca La orden \n");
-           // console.log(data);
+
+            //! look for the order and destroy the cart
 
             await ProductInCart.destroy({where: {cartId: created.userId}});
-            //console.log("\n************** Borra el carrito ********\n");
-            //console.log(y);
+
             console.log("*** An email has been sent with the receipt number ***");
             return data;
         } catch(error) { throw error; }
     };
-
 };
 
 module.exports = OrderServices;
