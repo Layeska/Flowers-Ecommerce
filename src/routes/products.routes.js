@@ -1,6 +1,5 @@
 const { Router } = require("express");
 const { getProducts, createProduct, getAll } = require("../controllers");
-const { validateCreateProduct } = require("../validators/products"); 
 
 const authenticate = require("../midlewares/auth.midleware");
 
