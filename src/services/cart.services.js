@@ -15,10 +15,6 @@ class CartServices {
 
             let sum = 0.0;
             let total = 0.0;
-
-            /*if(cart === null) {
-                cart = await Cart.create({userId: newProduct.userId, totalPrice: sumGlobal});
-            }*/
             
             total = Number(cart.totalPrice);
 
@@ -49,7 +45,7 @@ class CartServices {
         } catch(error) { throw error; }
     };
 
-    static async getAll(userId) {
+    static async getAll(userId, offset, limit) {
         try {
             return await Cart.findAndCountAll({ 
                 where: {userId: userId},
@@ -62,7 +58,7 @@ class CartServices {
                     attributes: {
                         exclude: ["product_id", "cart_id", "updatedAt"]
                     }
-                }
+                }, offset, limit, subQuery: false
             });
         } catch(error) { throw error; }
     }

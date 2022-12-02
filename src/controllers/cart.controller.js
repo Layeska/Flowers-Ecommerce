@@ -31,8 +31,18 @@ const addCart = async(req, res, next) => {
 const getCart = async(req, res, next) => {
     try {
         const {userId} = req.params;
-        const view = await CartServices.getAll(userId);
-        res.json(view);
+        const offset = Number(req.query.offset ?? 0);
+        const limit = Number(req.query.limit ?? 1);
+
+        const view = await CartServices.getAll(userId, offset, limit);
+        const {count, rows} = view;
+        
+        res.json({
+            count,
+            next: offset < count ? `${process.env.HOST_NAME}:${process.env.PORT}/api/v1${req.path}?offset=${offset+limit}&limit=${limit}` : null,
+            previous: offset > 0 ? `${process.env.HOST_NAME}:${process.env.PORT}/api/v1/${req.path}?offset=${offset-limit}&limit=${limit}` : null,
+            view: rows
+        });
     } catch(error) {
         next({
             status: 400,
