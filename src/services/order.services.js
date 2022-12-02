@@ -30,8 +30,8 @@ class OrderServices {
                 status: "purchased"
             });
 
-            console.log("\n********* Created - es la Orden: ******************\n")
-            console.log(created);
+           // console.log("\n********* Created - es la Orden: ******************\n")
+           // console.log(created);
 
             const orderId = created.id;
 
@@ -42,13 +42,13 @@ class OrderServices {
                 }
             });
 
-            console.log("\n**************AuxCart: es El CART*******************\n")
-            console.log(auxCart);
+            //console.log("\n**************AuxCart: es El CART*******************\n")
+            //console.log(auxCart);
 
             const auxList = auxCart.productsInCarts;
 
-            console.log("\n******************* AUXLIST - productInCart *********\n");
-            console.log(auxList);
+           // console.log("\n******************* AUXLIST - productInCart *********\n");
+           // console.log(auxList);
             //auxList.forEach(element => console.log(element));
 
             const listPurchased = auxList.map((product) => {
@@ -61,13 +61,13 @@ class OrderServices {
                 };
             });
 
-            console.log("\n********************** List Purchase es copia de product in order*******************\n")
-            console.log(listPurchased);
+            //console.log("\n********************** List Purchase es copia de product in order*******************\n")
+            //console.log(listPurchased);
 
 
-            console.log("\n******** X: Los productos en order *********\n")
-            const x = await forEach(listPurchased, async data => await ProductsInOrder.create(data));
-            console.log(x);
+            //console.log("\n******** X: Los productos en order *********\n")
+            await forEach(listPurchased, async data => await ProductsInOrder.create(data));
+            //console.log(x);
 
             //Se buscar la orden 
             const data = await Order.findOne({
@@ -77,12 +77,13 @@ class OrderServices {
                 }
             });
 
-            console.log("\n***********************DATA: Busca La orden \n");
-            console.log(data);
+           // console.log("\n***********************DATA: Busca La orden \n");
+           // console.log(data);
 
-            const y = await ProductInCart.destroy({where: {cartId: created.userId}});
-            console.log("\n************** Borra el carrito ********\n");
-            console.log(y);
+            await ProductInCart.destroy({where: {cartId: created.userId}});
+            //console.log("\n************** Borra el carrito ********\n");
+            //console.log(y);
+            console.log("*** An email has been sent with the receipt number ***");
             return data;
         } catch(error) { throw error; }
     };
