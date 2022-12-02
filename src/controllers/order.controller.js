@@ -30,14 +30,6 @@ const createPurchase = async(req, res, next) => {
         const product = await Products.findOne({where: {userId: userId}});
         const order = await OrderServices.create(info);
 
-       /* console.log(userModel.email);
-        console.log(userModel.userName);
-        console.log(order.id);
-        console.log(dateNow);*/
-       /* console.log(product.name);
-        console.log(product.category);
-        console.log(product.price);
-        ;*/
         console.log("UserModel: ", userModel);
         console.log("Products: ", product)
         transporter.sendMail({
