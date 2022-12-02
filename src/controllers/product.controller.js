@@ -1,11 +1,23 @@
 const { ProductsService } = require("../services");
+require("dotenv").config();
 
 const getAll = async(req, res, next) => {
     try {
-        const view = await ProductsService.getAllProduct();
+        const offset = req.query.offset ?? 0;
+        const limit = req.query.limit ?? 1;
+
+        const view = await ProductsService.getAllProduct(offset, limit);
         const aux = [];
-        view.forEach(data => {data.availableQty != 0 ? aux.push(data) : null});
-        res.json(view);
+        view.rows.forEach(data => {data.availableQty != 0 ? aux.push(data) : null});
+        
+        const {count, rows} = view;
+        res.json({
+            count,
+            next: offset < count ? `${process.env.HOST_NAME}:${process.env.PORT}/api/v1${req.path}?offset=${offset+limit}&limit=${limit}` : null,
+            previous: offset > 0 ? `${process.env.HOST_NAME}:${process.env.PORT}/api/v1/${req.path}?offset=${offset-limit}&limit=${limit}` : null,
+            view: rows
+        });
+
     } catch(error) {
         next({
             status: 400,

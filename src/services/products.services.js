@@ -2,9 +2,12 @@ const { Products, Users } = require("../models");
 
 class ProductsService {
 
-    static async getAllProduct() {
+    static async getAllProduct(offset, limit) {
         try {
-            return await Products.findAll();
+            return await Products.findAndCountAll({
+                offset, limit,
+                attributes: {exclude: ["category_id", "user_id"]}
+            });
         } catch(error) { throw error; }
     }
 
