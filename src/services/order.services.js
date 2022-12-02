@@ -2,11 +2,12 @@ const { Order, Cart, ProductInCart, ProductsInOrder } = require("../models");
 const { forEach } = require("p-iteration");
 
 class OrderServices {
-    static async getAll(userId) {
+    static async getAll(userId, offset, limit) {
         try {
-            return await Order.findAll({ 
+            return await Order.findAndCountAll({ 
                 where: {userId: userId},
-                include: { model: ProductsInOrder}
+                include: { model: ProductsInOrder},
+                offset, limit, subQuery: false
             });
         } catch(error) { throw error; }
     };

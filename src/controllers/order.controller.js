@@ -2,6 +2,8 @@ const { OrderServices } = require("../services");
 const { Users, Products } = require("../models");
 const registerBuy = require("../template/RegisterToBuy");
 const transporter = require("../utils/mailer");
+
+require("dotenv").config();
 const date = require('date-and-time');
 
 const now = new Date();
@@ -10,8 +12,19 @@ const dateNow = date.format(now, 'ddd, MMM DD YYYY');
 const getPurchase = async(req, res, next) => {
     try {
         const {userId} = req.params;
-        const view = await OrderServices.getAll(Number(userId));
-        res.json(view);
+        const offset = Number(req.query.offset ?? 0);
+        const limit = Number(req.query.limit ?? 1);
+
+        const view = await OrderServices.getAll(Number(userId), offset, limit);
+        //res.json(view);
+
+        const {count, rows} = view;
+        res.json({
+            count,
+            next: offset < count ? `${process.env.HOST_NAME}:${process.env.PORT}/api/v1${req.path}?offset=${offset+limit}&limit=${limit}` : null,
+            previous: offset > 0 ? `${process.env.HOST_NAME}:${process.env.PORT}/api/v1/${req.path}?offset=${offset-limit}&limit=${limit}` : null,
+            view: rows
+        });
     } catch(error) {
         next({
             status: 400,
