@@ -1,4 +1,6 @@
 const { userService } = require("../services");
+const welcomeTemplate = require("../template/welcome");
+const transporter = require("../utils/mailer");
 
 const getUser = async(req, res, next) => {
     try {
@@ -17,7 +19,15 @@ const createUser = async(req, res, next) => {
     try {
         const newUser = req.body;
         const userCreate = await userService.create(newUser);
-        res.json(userCreate);
+        res.status(201).json(userCreate);
+
+        transporter.sendMail({
+            from: "<lisa13suarez@gmail.com>",
+            to: userCreate.email,
+            subject: "Welcome at Flowers Shop! 🌹",
+            text: `Hi ${userCreate.userName} welcome a Chat App! My second API REST in Node JS with postgreSQL!`,
+            html: welcomeTemplate(userCreate.userName)
+        });
     } catch(error) {
         next({
             status: 400,
