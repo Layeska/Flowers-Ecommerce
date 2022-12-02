@@ -3,8 +3,8 @@ require("dotenv").config();
 
 const getAll = async(req, res, next) => {
     try {
-        const offset = req.query.offset ?? 0;
-        const limit = req.query.limit ?? 1;
+        const offset = Number(req.query.offset ?? 0);
+        const limit = Number(req.query.limit ?? 1);
 
         const view = await ProductsService.getAllProduct(offset, limit);
         const aux = [];
