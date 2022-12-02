@@ -31,7 +31,7 @@ const createCategory = async(req, res, next) => {
     try {
         const newCategory = req.body;
         await CategoryServices.create(newCategory);
-        res.json({message: "Category created"});
+        res.status(201).json({message: "Category created!"});
     } catch(error) {
         next({
             status: 400,

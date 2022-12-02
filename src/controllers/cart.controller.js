@@ -18,14 +18,11 @@ const addCart = async(req, res, next) => {
         } else {
             res.status(400).json({message: "This quantity cannot be purchased"});
         }
-
-      //  res.status(201).json({message: "successfully added"});
-
     } catch(error) {
         next({
             status: 400,
             errorContent: error,
-            message: ""
+            message: "Verify the information on the petition"
         });
     }
 };
@@ -40,7 +37,7 @@ const getCart = async(req, res, next) => {
         next({
             status: 400,
             errorContent: error,
-            message: ""
+            message: "Oops, an error has happened"
         });
     }
 };

@@ -10,7 +10,7 @@ const getPurchase = async(req, res, next) => {
         next({
             status: 400,
             errorContent: error,
-            message: ""
+            message: "Oops, an error has happened"
         });
     }
 };
@@ -28,7 +28,7 @@ const createPurchase = async(req, res, next) => {
         next({
             status: 400,
             errorContent: error,
-            message: ""
+            message: "Oops, an error has happened, purchase not created"
         });
     }
 }

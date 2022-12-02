@@ -10,7 +10,7 @@ const getAll = async(req, res, next) => {
         next({
             status: 400,
             errorContent: error,
-            message: "Check the request url"
+            message: "Check the request url or your data"
         });
     }
 };
@@ -22,17 +22,18 @@ const getProducts = async(req, res, next) => {
         const view = await ProductsService.showProducts(userId);
         const result =  [];
         view.forEach(data => { data.availableQty != 0 ? result.push(data) : null;});
-        res.json(result);
+        res.status(201).json(result);
     } catch(error) {
         next({
             status: 400,
             errorContent: error,
-            message: "Check the request token or url"
+            message: "Check the request token or url or data"
         });
     }
 };
 
 /*
+! Example of product:
 {
     "name": "Lavender",
     "description": "Lavender has the ability to relieve both physical and mental stress",
@@ -44,21 +45,18 @@ const getProducts = async(req, res, next) => {
 }
 */
 
-//++ Crea un producto según el user que se le agrege
-
-// hay alguna manera de que el userId sea el logeado, que sepa sin ponerlo en el link?
 const createProduct = async(req, res, next) => {
     try {
         const newProduct = req.body;
         const  { userId } = req.params;
         newProduct.userId = Number(userId);
         const productCreated = await ProductsService.create(newProduct);
-        res.json(productCreated);
+        res.status(201).json(productCreated);
     } catch(error) {
         next({
             status: 400,
             errorContent: error,
-            message: "Error! Check the data"
+            message: "Error! Check the data or endPoint"
         });
     }
 };

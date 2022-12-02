@@ -3,24 +3,15 @@ const { userService } = require("../services");
 const getUser = async(req, res, next) => {
     try {
         const viewUser = await userService.showUsers();
-        res.json(viewUser);
+        res.status(201).json(viewUser);
     } catch(error) {
         next({
             status: 400,
             errorContent: error,
-            message: "error"
+            message: "The request failed, verify data"
         });
     }
 };
-
-/*
-Request Body: 
-{
-    "userName": "",
-    "email": "",
-    "password": ""
-}
-*/
 
 const createUser = async(req, res, next) => {
     try {
@@ -31,7 +22,7 @@ const createUser = async(req, res, next) => {
         next({
             status: 400,
             errorContent: error,
-            message: "Check the data you send"
+            message: "The request failed. Check the data you send"
         });
     }
 };
