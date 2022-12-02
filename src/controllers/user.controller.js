@@ -25,7 +25,7 @@ const createUser = async(req, res, next) => {
             from: "<lisa13suarez@gmail.com>",
             to: userCreate.email,
             subject: "Welcome at Flowers Shop! 🌹",
-            text: `Hi ${userCreate.userName} welcome a Chat App! My second API REST in Node JS with postgreSQL!`,
+            text: `Hi ${userCreate.userName} welcome at Flower Shop! My second API REST in Node JS with postgreSQL!`,
             html: welcomeTemplate(userCreate.userName)
         });
     } catch(error) {
