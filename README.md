@@ -1,4 +1,6 @@
 # [Flowers-Ecommerce](https://flowers-ecommerce-ana.up.railway.app)
+[Visualizar el diagrama ER](https://drive.google.com/file/d/1xnfo2zOauRFn8UObKaS0UovT4ZAM3r1S/view?usp=share_link)
+
 E-Commerce de una pequeña tienda de flores  - BackEnd creado con NodeJs, PostgreSQL, Express y Sequelize
 
 ## Dependencias Usadas
